@@ -20,4 +20,4 @@ Spring Boot backend connected to MySQL database for managing basketball league d
 ## Database Schema
 
 To create all required tables, run the SQL DDL script located here:
-[`src/main/java/loyola/basketball/resources/db/schema.sql`](src/main/java/loyola/basketball/resources/db/schema.sql)
+[`src/main/resources/db/schema.sql`](src/main/resources/db/schema.sql)
