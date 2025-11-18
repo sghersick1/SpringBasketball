@@ -1,11 +1,13 @@
 package loyola.basketball.Controller;
 
+import loyola.basketball.Entity.Team.Team;
 import loyola.basketball.Service.TeamService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequestMapping("/team")
@@ -21,4 +23,10 @@ public class TeamController {
     public int getTeamCount(){
         return teamService.getTeamCount();
     }
+
+    @GetMapping("/teams")
+    public List<Team> getAllTeams(){
+        return teamService.getAllTeams();
+    }
+
 }
