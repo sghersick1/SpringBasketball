@@ -19,5 +19,7 @@ Spring Boot backend connected to MySQL database for managing basketball league d
 
 ## Database Schema
 
+Configure [`src/main/resources/application.properties`](src/main/resources/application.properties) with valid details
+
 To create all required tables, run the SQL DDL script located here:
 [`src/main/resources/db/Schema.sql`](src/main/resources/db/Schema.sql)
