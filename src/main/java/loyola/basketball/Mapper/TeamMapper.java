@@ -1,5 +1,6 @@
-package loyola.basketball.Entity.Team;
+package loyola.basketball.Mapper;
 
+import loyola.basketball.Entity.Team;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

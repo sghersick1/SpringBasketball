@@ -1,6 +1,6 @@
 package loyola.basketball.Service;
 
-import loyola.basketball.Entity.Team.Team;
+import loyola.basketball.Entity.Team;
 import loyola.basketball.Repository.TeamRepository;
 import org.springframework.stereotype.Service;
 

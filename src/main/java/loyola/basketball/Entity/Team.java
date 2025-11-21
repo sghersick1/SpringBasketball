@@ -1,4 +1,4 @@
-package loyola.basketball.Entity.Team;
+package loyola.basketball.Entity;
 
 public class Team {
     private int teamId;
@@ -19,8 +19,6 @@ public class Team {
     }
 
     // Getters + Setters
-
-
     public int getTeamId() {
         return teamId;
     }
@@ -75,5 +73,18 @@ public class Team {
 
     public void setPointsAgainst(int pointsAgainst) {
         this.pointsAgainst = pointsAgainst;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "teamId=" + teamId +
+                ", teamName='" + teamName + '\'' +
+                ", wins=" + wins +
+                ", losses=" + losses +
+                ", ties=" + ties +
+                ", pointsFor=" + pointsFor +
+                ", pointsAgainst=" + pointsAgainst +
+                '}';
     }
 }

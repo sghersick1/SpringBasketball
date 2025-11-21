@@ -35,8 +35,8 @@ public class SecurityConfig {
         @Bean
         SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
             http.authorizeHttpRequests((req) -> req
-                    .requestMatchers("/team/**").authenticated()
-                    .requestMatchers("/unauthorized/**").permitAll()
+                    .requestMatchers("/team/**", "/game/**").authenticated()
+                    .anyRequest().permitAll()
             );
             http.sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)));
             http.httpBasic(Customizer.withDefaults());

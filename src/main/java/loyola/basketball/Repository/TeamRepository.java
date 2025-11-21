@@ -1,8 +1,8 @@
 package loyola.basketball.Repository;
 
 
-import loyola.basketball.Entity.Team.Team;
-import loyola.basketball.Entity.Team.TeamMapper;
+import loyola.basketball.Entity.Team;
+import loyola.basketball.Mapper.TeamMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -29,6 +29,10 @@ public class TeamRepository {
         return teamCount;
     }
 
+    /**
+     * Get all Teams
+     * @return List of Teams
+     */
     public List<Team> getAllTeams(){
         return jdbc.query("Select * from Team", new TeamMapper());
     }
