@@ -4,7 +4,7 @@ import java.sql.Time;
 import java.sql.Date;
 
 public class Game {
-    private int id_game;
+    private int gameId;
 
     // Game Attributes
     private Date date;
@@ -13,20 +13,20 @@ public class Game {
 
     // Participating Teams
     private int home;
-    private int homeScore;
+    private Integer homeScore;
     private int away;
-    private int awayScore;
+    private Integer awayScore;
 
     // Constructors
     public Game(){}
 
     // Getters & Setters
-    public int getId_game() {
-        return id_game;
+    public int getGameId() {
+        return gameId;
     }
 
-    public void setId_game(int id_game) {
-        this.id_game = id_game;
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 
     public Date getDate() {
@@ -61,11 +61,11 @@ public class Game {
         this.home = home;
     }
 
-    public int getHomeScore() {
+    public Integer getHomeScore() {
         return homeScore;
     }
 
-    public void setHomeScore(int homeScore) {
+    public void setHomeScore(Integer homeScore) {
         this.homeScore = homeScore;
     }
 
@@ -77,18 +77,18 @@ public class Game {
         this.away = away;
     }
 
-    public int getAwayScore() {
+    public Integer getAwayScore() {
         return awayScore;
     }
 
-    public void setAwayScore(int awayScore) {
+    public void setAwayScore(Integer awayScore) {
         this.awayScore = awayScore;
     }
 
     @Override
     public String toString() {
         return "Game{" +
-                "id_game=" + id_game +
+                "id_game=" + gameId +
                 ", date=" + date +
                 ", time=" + time +
                 ", location='" + location + '\'' +

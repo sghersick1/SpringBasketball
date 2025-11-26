@@ -3,8 +3,11 @@ package loyola.basketball.Repository;
 import loyola.basketball.Entity.Game;
 import loyola.basketball.Mapper.GameMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -31,8 +34,41 @@ public class GameRepository {
                 "WHERE t1.id_team < t2.id_team\n" +
                 "order by g.date, g.time;";
         List<Game> game = jdbc.query(sqlScript, new GameMapper());
-
-        game.stream().forEach(System.out::println);
         return game;
+    }
+
+    /**
+     * Create a game in the Database + update game object Id
+     * @param game object
+     */
+    public void createGame(Game game){
+        String gameScript = "INSERT INTO game(date, time, location, completed, voided) " +
+                "VALUES(?, ?, ?, FALSE, FALSE);";
+
+        String teamGameScript = "INSERT INTO team_plays_game(id_team, id_game, points) VALUES" +
+                "(?, ?, ?)," +
+                "(?, ?, ?);";
+
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbc.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(gameScript, Statement.RETURN_GENERATED_KEYS);
+            ps.setDate(1, game.getDate());
+            ps.setTime(2, game.getTime());
+            ps.setString(3, game.getLocation());
+            return ps;
+        }, keyHolder);
+
+        game.setGameId(keyHolder.getKey().intValue());
+
+        jdbc.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(teamGameScript);
+            ps.setInt(1, game.getHome());
+            ps.setInt(2, game.getGameId());
+            ps.setObject(3, game.getHomeScore());
+            ps.setInt(4, game.getAway());
+            ps.setInt(5, game.getGameId());
+            ps.setObject(6, game.getAwayScore());
+            return ps;
+        });
     }
 }
