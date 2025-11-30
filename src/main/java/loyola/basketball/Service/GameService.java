@@ -20,10 +20,8 @@ public class GameService {
         return gameRepo.schedule();
     }
     public Game createGame(int homeId, Integer homePoints, int awayId, Integer awayPoints, String location, Date date, Time time){
-        Game game = new Game();
-        game.setHome(homeId);
+        Game game = new Game(homeId, awayId);
         game.setHomeScore(homePoints);
-        game.setAway(awayId);
         game.setAwayScore(awayPoints);
         game.setLocation(location);
         game.setDate(date);

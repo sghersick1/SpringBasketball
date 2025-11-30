@@ -20,11 +20,26 @@ public class GameController {
         this.gameService = gameService;
     }
 
+    /**
+     * All games
+     * @return all games in database
+     */
     @GetMapping("/schedule")
     public List<Game> schedule(){
         return gameService.schedule();
     }
 
+    /**
+     * Create a new game
+     * @param homeId id of home team
+     * @param homePoints score of home team
+     * @param awayId id of away team
+     * @param awayPoints score of away team
+     * @param location
+     * @param date
+     * @param time
+     * @return HTTP response with game data in body, and endpoint in "location" header
+     */
     @PostMapping()
     public ResponseEntity<Game> create(@RequestParam int homeId,
                                        @RequestParam(required = false) Integer homePoints,

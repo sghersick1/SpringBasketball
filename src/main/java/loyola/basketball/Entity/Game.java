@@ -18,7 +18,21 @@ public class Game {
     private Integer awayScore;
 
     // Constructors
-    public Game(){}
+    public Game(int home, int away){
+        this.home = home;
+        this.away = away;
+    }
+
+    public Game(int gameId, Date date, Time time, String location, int home, Integer homeScore, int away, Integer awayScore) {
+        this.gameId = gameId;
+        this.date = date;
+        this.time = time;
+        this.location = location;
+        this.home = home;
+        this.homeScore = homeScore;
+        this.away = away;
+        this.awayScore = awayScore;
+    }
 
     // Getters & Setters
     public int getGameId() {
@@ -83,6 +97,35 @@ public class Game {
 
     public void setAwayScore(Integer awayScore) {
         this.awayScore = awayScore;
+    }
+
+    // Additional Methods
+    public boolean isComplete(){
+        return homeScore != null && awayScore != null;
+    }
+
+    public boolean isTie(){
+        return homeScore == awayScore;
+    }
+
+    public void updateStatistic(int teamId, Statistics stats) throws IllegalStateException{
+        if(!isComplete() || (teamId != home && teamId != away)) throw new IllegalStateException();
+
+        if(teamId == home){ // If home team
+            if(homeScore > awayScore){
+                stats.incWins();
+            }else if(awayScore > homeScore){
+                stats.incLosses();
+            }else stats.incTies();
+            stats.addPointsFor(homeScore);
+            stats.addPointsAgainst(awayScore);
+        }else{ // If away team
+            if(awayScore > homeScore) stats.incWins();
+            else if (homeScore > awayScore) stats.incLosses();
+            else stats.incTies();
+            stats.addPointsFor(awayScore);
+            stats.addPointsAgainst(homeScore);
+        }
     }
 
     @Override

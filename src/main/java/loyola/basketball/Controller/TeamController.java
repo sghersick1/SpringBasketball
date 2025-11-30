@@ -2,9 +2,10 @@ package loyola.basketball.Controller;
 
 import loyola.basketball.Entity.Team;
 import loyola.basketball.Service.TeamService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,14 @@ public class TeamController {
     @GetMapping("/teams")
     public List<Team> getAllTeams(){
         return teamService.getAllTeams();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Team> createTeam(@RequestBody Team team){
+
+        URI getEndpoint = URI.create("/team/"+team.getTeamId());
+
+        return ResponseEntity.created(getEndpoint).body(team);
     }
 
 }

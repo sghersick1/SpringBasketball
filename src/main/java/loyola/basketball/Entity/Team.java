@@ -1,24 +1,31 @@
+/**
+ * Team object including id, name, players, and games
+ */
 package loyola.basketball.Entity;
 
+import java.util.List;
+
 public class Team {
+    // Attributes
     private int teamId;
     private String teamName;
-
-    private int wins;
-    private int losses;
-    private int ties;
-    private int pointsFor;
-    private int pointsAgainst;
+    private List<Player> players;
+    private List<Game> games;
+    private Statistics stats;
 
     // Constructors
     public Team(){}
 
-    public Team(int teamId, String teamName){
-        this.teamId = teamId;
+    public Team(String teamName) {
         this.teamName = teamName;
     }
 
-    // Getters + Setters
+    public Team(String teamName, List<Player> players) {
+        this.teamName = teamName;
+        this.players = players;
+    }
+
+    // Getters & Setters
     public int getTeamId() {
         return teamId;
     }
@@ -35,56 +42,49 @@ public class Team {
         this.teamName = teamName;
     }
 
-    public int getWins() {
-        return wins;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setWins(int wins) {
-        this.wins = wins;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
-    public int getLosses() {
-        return losses;
+    public List<Game> getGames() {
+        return games;
     }
 
-    public void setLosses(int losses) {
-        this.losses = losses;
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 
-    public int getTies() {
-        return ties;
+    public Statistics getStats() {
+        return stats;
     }
 
-    public void setTies(int ties) {
-        this.ties = ties;
+    public void setStats(Statistics stats) {
+        this.stats = stats;
     }
 
-    public int getPointsFor() {
-        return pointsFor;
+    // Additional Methods
+    public List<Game> upcomingGames(){
+        return null;
     }
 
-    public void setPointsFor(int pointsFor) {
-        this.pointsFor = pointsFor;
+    public List<Game> completedGames(){
+        return null;
     }
 
-    public int getPointsAgainst() {
-        return pointsAgainst;
-    }
+    /**
+     * Iterate through all completed games and update statistics object
+     * @return this team's league statistics
+     */
+    public Statistics calculateStats(){
+        games.stream()
+                .filter(game -> game.isComplete() == true)
+                .forEach(game -> game.updateStatistic(teamId, stats));
+        ;
 
-    public void setPointsAgainst(int pointsAgainst) {
-        this.pointsAgainst = pointsAgainst;
-    }
-
-    @Override
-    public String toString() {
-        return "Team{" +
-                "teamId=" + teamId +
-                ", teamName='" + teamName + '\'' +
-                ", wins=" + wins +
-                ", losses=" + losses +
-                ", ties=" + ties +
-                ", pointsFor=" + pointsFor +
-                ", pointsAgainst=" + pointsAgainst +
-                '}';
+        return stats;
     }
 }
