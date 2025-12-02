@@ -71,4 +71,29 @@ public class GameRepository {
             return ps;
         });
     }
+
+    /**
+     * Get all the games played by a team
+     * @param teamId of team
+     * @return List of games that include the team
+     */
+    public List<Game> getGameByTeamId(int teamId){
+        String sqlScript = "SELECT\n" +
+                "    g.id_game,\n" +
+                "    g.date,\n" +
+                "    g.time,\n" +
+                "    g.location,\n" +
+                "    t1.id_team  AS id_team_1,\n" +
+                "    t1.points   AS score_team_1,\n" +
+                "    t2.id_team  AS id_team_2,\n" +
+                "    t2.points   AS score_team_2\n" +
+                "FROM Game g\n" +
+                "JOIN Team_Plays_Game t1\n" +
+                "    using(id_game)\n" +
+                "JOIN Team_Plays_Game t2 using(id_game)\n" +
+                "WHERE t1.id_team = "+teamId+" and t2.id_team <> "+teamId+"\n" +
+                "order by g.date, g.time;";
+
+        return jdbc.query(sqlScript, new GameMapper());
+    }
 }

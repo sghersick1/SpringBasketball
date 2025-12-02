@@ -14,15 +14,19 @@ public class Team {
     private Statistics stats;
 
     // Constructors
-    public Team(){}
+    public Team(){
+        stats = new Statistics();
+    }
 
     public Team(String teamName) {
         this.teamName = teamName;
+        stats = new Statistics();
     }
 
     public Team(String teamName, List<Player> players) {
         this.teamName = teamName;
         this.players = players;
+        stats = new Statistics();
     }
 
     // Getters & Setters
@@ -86,5 +90,16 @@ public class Team {
         ;
 
         return stats;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "teamId=" + teamId +
+                ", teamName='" + teamName + '\'' +
+                ", players=" + players +
+                ", games=" + games +
+                ", stats=" + stats +
+                '}';
     }
 }

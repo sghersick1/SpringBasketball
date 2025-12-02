@@ -2,6 +2,7 @@ package loyola.basketball.Controller;
 
 import loyola.basketball.Entity.Team;
 import loyola.basketball.Service.TeamService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,11 @@ public class TeamController {
         URI getEndpoint = URI.create("/team/"+team.getTeamId());
 
         return ResponseEntity.created(getEndpoint).body(team);
+    }
+
+    @GetMapping()
+    public ResponseEntity<Team> getTeamById(@RequestParam int teamId){
+        return new ResponseEntity(teamService.getTeam(teamId), HttpStatus.OK);
     }
 
 }
