@@ -45,6 +45,11 @@ public class PlayerRepository {
         assert(players.size() <= 1);
         return players.get(0);
     }
+
+    public List<Player> getPlayersByTeam(int teamId){
+        String sqlScript = "SELECT * from players where id_team = "+teamId+";";
+        return jdbc.query(sqlScript, mapper);
+    }
     public void deletePlayerById(int playerId){
         jdbc.update("DELETE FROM players WHERE id_player = ?;", playerId);
     }

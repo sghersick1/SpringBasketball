@@ -2,6 +2,7 @@ package loyola.basketball.Service;
 
 import loyola.basketball.Entity.Team;
 import loyola.basketball.Repository.GameRepository;
+import loyola.basketball.Repository.PlayerRepository;
 import loyola.basketball.Repository.TeamRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,12 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final GameRepository gameRepository;
+    private final PlayerRepository playerRepository;
 
-    public TeamService(TeamRepository teamRepository, GameRepository gameRepository){
+    public TeamService(TeamRepository teamRepository, GameRepository gameRepository, PlayerRepository playerRepository){
         this.teamRepository = teamRepository;
         this.gameRepository = gameRepository;
+        this.playerRepository = playerRepository;
     }
 
     public List<Team> getAllTeams(){
@@ -36,6 +39,7 @@ public class TeamService {
      * @param t Team
      */
     private Team updateGameStatistics(Team t){
+        t.setPlayers(playerRepository.getPlayersByTeam(t.getTeamId()));
         t.setGames(gameRepository.getGameByTeamId(t.getTeamId()));
         t.calculateStats();
         return t;

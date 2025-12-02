@@ -19,11 +19,25 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    /**
+     * Get a player by id
+     * @param playerId
+     * @return player
+     */
     @GetMapping()
     public ResponseEntity<Player> readPlayer(@RequestParam int playerId){
         return new ResponseEntity(playerService.readPlayer(playerId), HttpStatus.OK);
     }
 
+    /**
+     * Create a new player
+     * @param playerName
+     * @param grade
+     * @param draftPick
+     * @param isCaptain
+     * @param teamId
+     * @return player that was created
+     */
     @PostMapping()
     public ResponseEntity<Player> createPlayer(@RequestParam String playerName,
                                                @RequestParam String grade,
@@ -34,6 +48,10 @@ public class PlayerController {
         return ResponseEntity.created(URI.create("/player?playerId="+p.getPlayerId())).body(p);
     }
 
+    /**
+     * Delete a player by id
+     * @param playerId
+     */
     @DeleteMapping()
     public void deletePlayer(@RequestParam int playerId){
         playerService.deletePlayer(playerId);
