@@ -2,11 +2,13 @@ package loyola.basketball.Mapper;
 
 import loyola.basketball.Entity.Game;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+@Component
 public class GameMapper implements RowMapper<Game>
 {
     @Override

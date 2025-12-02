@@ -13,8 +13,10 @@ import java.util.List;
 @Repository
 public class GameRepository {
     private final JdbcTemplate jdbc;
-    public GameRepository(JdbcTemplate jdbc){
+    private final GameMapper mapper;
+    public GameRepository(JdbcTemplate jdbc, GameMapper mapper){
         this.jdbc = jdbc;
+        this.mapper = mapper;
     }
 
     public List<Game> schedule(){
@@ -33,7 +35,7 @@ public class GameRepository {
                 "JOIN Team_Plays_Game t2 using(id_game)\n" +
                 "WHERE t1.id_team < t2.id_team\n" +
                 "order by g.date, g.time;";
-        List<Game> game = jdbc.query(sqlScript, new GameMapper());
+        List<Game> game = jdbc.query(sqlScript, mapper);
         return game;
     }
 
@@ -94,6 +96,6 @@ public class GameRepository {
                 "WHERE t1.id_team = "+teamId+" and t2.id_team <> "+teamId+"\n" +
                 "order by g.date, g.time;";
 
-        return jdbc.query(sqlScript, new GameMapper());
+        return jdbc.query(sqlScript, mapper);
     }
 }

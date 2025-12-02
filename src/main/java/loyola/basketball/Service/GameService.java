@@ -11,10 +11,9 @@ import java.util.List;
 @Service
 public class GameService {
 
-    GameRepository gameRepo;
+    private final GameRepository gameRepo;
 
     public GameService(GameRepository gameRepo){this.gameRepo = gameRepo;}
-
 
     public List<Game> schedule(){
         return gameRepo.schedule();

@@ -104,10 +104,6 @@ public class Game {
         return homeScore != null && awayScore != null;
     }
 
-    public boolean isTie(){
-        return homeScore == awayScore;
-    }
-
     public void updateStatistic(int teamId, Statistics stats) throws IllegalStateException{
         if(!isComplete() || (teamId != home && teamId != away)) throw new IllegalStateException();
 

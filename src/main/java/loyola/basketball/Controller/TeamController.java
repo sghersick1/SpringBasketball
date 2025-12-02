@@ -19,27 +19,35 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-    @GetMapping("/team-count")
-    public int getTeamCount(){
-        return teamService.getTeamCount();
+    /**
+     * Get a team given the id
+     * @param teamId
+     * @return team object (JSON)
+     */
+    @GetMapping()
+    public ResponseEntity<Team> getTeamById(@RequestParam int teamId){
+        return new ResponseEntity(teamService.getTeam(teamId), HttpStatus.OK);
     }
 
+    /**
+     * Get all teams
+     * @return List of all team objects (JSON)
+     */
     @GetMapping("/teams")
     public List<Team> getAllTeams(){
         return teamService.getAllTeams();
     }
 
+    /**
+     * Create a new team
+     * @param teamName of the team
+     * @return team created + location to GET team in future (http location header)
+     */
     @PostMapping("/create")
-    public ResponseEntity<Team> createTeam(@RequestBody Team team){
-
-        URI getEndpoint = URI.create("/team/"+team.getTeamId());
-
-        return ResponseEntity.created(getEndpoint).body(team);
-    }
-
-    @GetMapping()
-    public ResponseEntity<Team> getTeamById(@RequestParam int teamId){
-        return new ResponseEntity(teamService.getTeam(teamId), HttpStatus.OK);
+    public ResponseEntity<Team> createTeam(@RequestParam String teamName){
+        Team t = new Team(teamName);
+        URI getEndpoint = URI.create("/team/"+t.getTeamId());
+        return ResponseEntity.created(getEndpoint).body(t);
     }
 
 }

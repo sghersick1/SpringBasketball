@@ -11,22 +11,11 @@ import java.util.List;
 @Repository
 public class TeamRepository {
     private final JdbcTemplate jdbc;
+    private final TeamMapper mapper;
 
-    public TeamRepository(JdbcTemplate jdbc){
+    public TeamRepository(JdbcTemplate jdbc, TeamMapper mapper){
         this.jdbc = jdbc;
-    }
-
-    /**
-     * Get number of teams
-     * @return number of teams
-     */
-    public int getTeamCount(){
-        Integer teamCount = jdbc.queryForObject(
-                "SELECT count(*) FROM TEAM",
-                Integer.class
-        );
-
-        return teamCount;
+        this.mapper = mapper;
     }
 
     /**
@@ -34,7 +23,7 @@ public class TeamRepository {
      * @return List of Teams
      */
     public List<Team> getAllTeams(){
-        return jdbc.query("Select * from Team", new TeamMapper());
+        return jdbc.query("Select * from Team", mapper);
     }
 
     /**

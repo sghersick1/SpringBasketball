@@ -1,20 +1,31 @@
 package loyola.basketball.Entity;
 
-// Enum year -> freshman, sophomore, senior, super-senior
-enum Year{ FRESHMAN, SOPHOMORE, JUNIOR, SENIOR, SUPER_SENIOR }
-
 public class Player {
     private int playerId;
     private String name;
-    private Year year;
-    private String draftPick;
+    private Grade year;
+    private Integer draftPick;
+    private boolean isCaptain;
+    private int teamId;
 
-    public Player(String name, Year year, String draftPick) {
+    public Player(){}
+    public Player(String name, Grade year, Integer draftPick, boolean isCaptain, int teamId) {
         this.name = name;
         this.year = year;
         this.draftPick = draftPick;
+        this.isCaptain = isCaptain;
+        this.teamId = teamId;
+    }
+    public Player(int playerId, String name, Grade year, Integer draftPick, boolean isCaptain, int teamId) {
+        this.playerId = playerId;
+        this.name = name;
+        this.year = year;
+        this.draftPick = draftPick;
+        this.isCaptain = isCaptain;
+        this.teamId = teamId;
     }
 
+    // Getters & Setters
     public int getPlayerId() {
         return playerId;
     }
@@ -31,19 +42,35 @@ public class Player {
         this.name = name;
     }
 
-    public Year getYear() {
+    public Grade getYear() {
         return year;
     }
 
-    public void setYear(Year year) {
+    public void setYear(Grade year) {
         this.year = year;
     }
 
-    public String getDraftPick() {
+    public Integer getDraftPick() {
         return draftPick;
     }
 
-    public void setDraftPick(String draftPick) {
+    public void setDraftPick(Integer draftPick) {
         this.draftPick = draftPick;
+    }
+
+    public boolean isCaptain() {
+        return isCaptain;
+    }
+
+    public void setCaptain(boolean captain) {
+        isCaptain = captain;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
     }
 }

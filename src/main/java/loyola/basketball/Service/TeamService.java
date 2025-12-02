@@ -5,6 +5,7 @@ import loyola.basketball.Repository.GameRepository;
 import loyola.basketball.Repository.TeamRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.Temporal;
 import java.util.List;
 
 @Service
@@ -18,14 +19,24 @@ public class TeamService {
         this.gameRepository = gameRepository;
     }
 
-    public int getTeamCount(){
-        return teamRepository.getTeamCount();
+    public List<Team> getAllTeams(){
+        List<Team> teams = teamRepository.getAllTeams();
+        return teams.stream()
+                .map(team -> updateGameStatistics(team))
+                //.sorted(StatisticsComparator::compare)
+                .toList();
     }
-    public List<Team> getAllTeams(){return teamRepository.getAllTeams();}
 
     public Team getTeam(int teamId){
-        Team t = teamRepository.getTeamById(teamId);
-        t.setGames(gameRepository.getGameByTeamId(teamId));
+        return updateGameStatistics(teamRepository.getTeamById(teamId));
+    }
+
+    /**
+     * Update teams game list from DB, and calculate league statistics
+     * @param t Team
+     */
+    private Team updateGameStatistics(Team t){
+        t.setGames(gameRepository.getGameByTeamId(t.getTeamId()));
         t.calculateStats();
         return t;
     }
