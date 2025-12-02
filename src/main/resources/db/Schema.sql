@@ -24,6 +24,19 @@ create table Team_Plays_Game(
     constraint tpg_game_fk foreign key(id_game) references Game(id_Game)
 );
 
+CREATE TABLE players(
+    id_player INT NOT NULL AUTO_INCREMENT,
+    name_player VARCHAR(100) NOT NULL,
+    grade ENUM('FRESHMAN', 'SOPHOMORE', 'JUNIOR', 'SENIOR') NOT NULL,
+    draft_pick INT,
+    is_captain BOOLEAN NOT NULL DEFAULT FALSE,
+    id_team INT NOT NULL,
+
+    CONSTRAINT players_pk PRIMARY KEY(id_player),
+    CONSTRAINT players_team_fk FOREIGN KEY(id_team) REFERENCES Team(id_team)
+);
+
+
 -- Default Spring Security Schema
 create table users(username varchar(50) not null primary key,password varchar(500) not null,enabled boolean not null);
 create table authorities (username varchar(50) not null,authority varchar(50) not null,constraint fk_authorities_users foreign key(username) references users(username));
