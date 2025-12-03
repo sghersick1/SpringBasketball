@@ -40,15 +40,23 @@ public class PlayerRepository {
     }
 
     public Player readPlayerById(int playerId){
-        String sqlScript = "SELECT * from players where id_player = "+playerId+";";
-        List<Player> players = jdbc.query(sqlScript, mapper);
+        String sqlScript = "SELECT * from players where id_player = ?;";
+        List<Player> players = jdbc.query(con -> {
+                                    PreparedStatement ps = con.prepareStatement(sqlScript);
+                                    ps.setInt(1, playerId);
+                                    return ps;
+                                }, mapper);
         assert(players.size() <= 1);
         return players.get(0);
     }
 
     public List<Player> getPlayersByTeam(int teamId){
-        String sqlScript = "SELECT * from players where id_team = "+teamId+";";
-        return jdbc.query(sqlScript, mapper);
+        String sqlScript = "SELECT * from players where id_team = ?;";
+        return jdbc.query(con -> {
+            PreparedStatement ps = con.prepareStatement(sqlScript);
+            ps.setInt(1, teamId);
+            return ps;
+        }, mapper);
     }
     public void deletePlayerById(int playerId){
         jdbc.update("DELETE FROM players WHERE id_player = ?;", playerId);

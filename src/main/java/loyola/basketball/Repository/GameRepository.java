@@ -93,9 +93,14 @@ public class GameRepository {
                 "JOIN Team_Plays_Game t1\n" +
                 "    using(id_game)\n" +
                 "JOIN Team_Plays_Game t2 using(id_game)\n" +
-                "WHERE t1.id_team = "+teamId+" and t2.id_team <> "+teamId+"\n" +
+                "WHERE t1.id_team = ? and t2.id_team <> ?\n" +
                 "order by g.date, g.time;";
 
-        return jdbc.query(sqlScript, mapper);
+        return jdbc.query(con ->{
+            PreparedStatement ps = con.prepareStatement(sqlScript);
+            ps.setInt(1, teamId);
+            ps.setInt(2, teamId);
+            return ps;
+        }, mapper);
     }
 }
