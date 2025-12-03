@@ -34,7 +34,8 @@ CREATE TABLE players(
 
     CONSTRAINT players_pk PRIMARY KEY(id_player),
     CONSTRAINT players_team_fk FOREIGN KEY(id_team) REFERENCES Team(id_team),
-    CONSTRAINT player_draft_pick_uk UNIQUE Key(draft_pick)
+    CONSTRAINT player_draft_pick_uk UNIQUE Key(draft_pick),
+    CONSTRAINT player_name_uk UNIQUE Key(name_player)
 );
 
 
