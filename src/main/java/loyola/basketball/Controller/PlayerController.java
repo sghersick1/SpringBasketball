@@ -41,7 +41,7 @@ public class PlayerController {
     @PostMapping()
     public ResponseEntity<Player> createPlayer(@RequestParam String playerName,
                                                @RequestParam String grade,
-                                               @RequestParam Integer draftPick,
+                                               @RequestParam(required = false) Integer draftPick,
                                                @RequestParam(required = false) boolean isCaptain,
                                                @RequestParam int teamId){
         Player p = playerService.createPlayer(new Player(playerName, Grade.valueOf(grade), draftPick, isCaptain, teamId));
