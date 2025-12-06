@@ -34,3 +34,4 @@ build/
 
 ### Secret Keys ###
 secrets.properties
+**/secrets.properties
