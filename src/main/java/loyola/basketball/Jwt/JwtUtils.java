@@ -25,7 +25,7 @@ import java.util.List;
 
 @Component
 public class JwtUtils {
-    private final String secretKey = "4261656C64756E67";
+    private final String jwtSecret = "2q+DG7UiyhRZK+1XHFqRSbVSSMzdg3NofM8JrIoVNew=";
     private final Duration exp = Duration.ofMinutes(25);
 
     // Generate user token with
@@ -33,9 +33,14 @@ public class JwtUtils {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + exp.toMillis());
 
+        // Need to save roles as strings (not GrantedAuthority Objects)
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
         return Jwts.builder()
                 .subject(authentication.getName())
-                .claim("roles", authentication.getAuthorities())
+                .claim("roles", roles)
                 .issuedAt(new Date())
                 .expiration(expiry)
                 .signWith(getSigningKey())
@@ -71,6 +76,7 @@ public class JwtUtils {
         try{
             return !extractExpiration(token).before(new Date());
         }catch (Exception e) { // Token doesn't have expiration
+            System.out.println("INVALID TOKEN - unable to extract expiration");
             return false;
         }
     }
@@ -78,14 +84,15 @@ public class JwtUtils {
     // Extract token expiration
     private Date extractExpiration(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey.getBytes())
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
+                .getPayload()
                 .getExpiration();
     }
 
     SecretKey getSigningKey() {
-        return Jwts.SIG.HS256.key().build();
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
