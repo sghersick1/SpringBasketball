@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +26,8 @@ import java.util.List;
 
 @Component
 public class JwtUtils {
-    private final String jwtSecret = "2q+DG7UiyhRZK+1XHFqRSbVSSMzdg3NofM8JrIoVNew=";
+    @Value("${JWT_SECRET_KEY}")
+    private String jwtSecret;
     private final Duration exp = Duration.ofMinutes(25);
 
     // Generate user token with
