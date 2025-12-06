@@ -41,7 +41,6 @@ public class AuthenticationJwtTokenFilter extends OncePerRequestFilter {
      */
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
-        System.out.println("ENTERING JWT FILTER!!");
         // Validate JWT token from Authorization header
         String bearer = request.getHeader("Authorization");
 
