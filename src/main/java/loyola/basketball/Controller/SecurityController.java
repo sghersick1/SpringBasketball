@@ -1,5 +1,7 @@
 package loyola.basketball.Controller;
 
+import loyola.basketball.Entity.RefreshTokenRequest;
+import loyola.basketball.Entity.UserRequest;
 import loyola.basketball.Jwt.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +15,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -40,53 +40,55 @@ public class SecurityController {
 
     /**
      * Register a new user and return them a JWT token
-     * @param username
-     * @param password
-     * @return
+     * @param user user details
+     * @return access + refresh token
      */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestParam String username, @RequestParam String password){
+    public ResponseEntity<?> register(@RequestBody UserRequest user){
         // Ensure username isn't taken
-        if(userDetailsService.userExists(username)) {
+        if(userDetailsService.userExists(user.getUsername())) {
             return ResponseEntity.status(HttpStatus.CONFLICT) // 409 is standard for conflicts like username taken
                     .body(Map.of(
                             "error", "USERNAME_TAKEN",
-                            "message", "The username '" + username + "' is already in use.",
-                            "username", username
+                            "message", "The username '" + user.getUsername() + "' is already in use.",
+                            "username", user.getUsername()
                     ));
         }
 
         // Create user in database
-        UserDetails user = User.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
+        UserDetails userDetails = User.builder()
+                .username(user.getUsername())
+                .password(passwordEncoder.encode(user.getPassword()))
                 .roles("USER")
                 .build();
 
-        userDetailsService.createUser(user);
+        userDetailsService.createUser(userDetails);
 
         // Create JWT token for user
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                username,
-                null,
-                user.getAuthorities()
-        );
-        String jwtToken = jwtUtils.generateToken(authentication);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        String accessToken = jwtUtils.generateAccessToken(authentication);
+        String refreshToken = jwtUtils.generateRefreshToken(authentication);
 
         // Return JWT token
         return ResponseEntity.created(URI.create("/auth/register")).body(Map.of(
-                "accessToken", jwtToken,
-                "tokenType", "Bearer"));
+                "accessToken", accessToken,
+                "refreshToken", refreshToken));
     }
 
+    /**
+     * Login a user
+     * @param user user details
+     * @return access + refresh token
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password){
+    public ResponseEntity<?> login(@RequestBody UserRequest user){
         try{
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            String jwtToken = jwtUtils.generateToken(auth);
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+            String accessToken = jwtUtils.generateAccessToken(auth);
+            String refreshToken = jwtUtils.generateRefreshToken(auth);
             return ResponseEntity.ok(Map.of(
-                    "accessToken", jwtToken,
-                    "tokenType", "Bearer"
+                    "accessToken", accessToken,
+                    "refreshToken", refreshToken
             ));
         }catch (AuthenticationException e){
             System.out.println(e);
@@ -96,5 +98,16 @@ public class SecurityController {
                             "message", "Invalid username or password."
                     ));
         }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@RequestBody RefreshTokenRequest request){
+        String refreshToken = request.getRefreshToken();
+        if (jwtUtils.isValid(refreshToken)) {
+            Authentication auth = new UsernamePasswordAuthenticationToken(jwtUtils.extractUsername(refreshToken), null);
+            String newAccessToken = jwtUtils.generateAccessToken(auth);
+            return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
+        }
+        return ResponseEntity.status(403).body("Invalid refresh token");
     }
 }

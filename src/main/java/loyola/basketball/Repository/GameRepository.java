@@ -102,5 +102,6 @@ public class GameRepository {
             ps.setInt(2, teamId);
             return ps;
         }, mapper);
+
     }
 }

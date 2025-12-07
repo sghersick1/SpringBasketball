@@ -28,13 +28,21 @@ import java.util.List;
 public class JwtUtils {
     @Value("${JWT_SECRET_KEY}")
     private String jwtSecret;
-    private final Duration exp = Duration.ofMinutes(25);
+    private final Duration accessExp = Duration.ofMinutes(25);
+    private final Duration refreshExp = Duration.ofDays(30);
 
     // Generate user token with
-    public String generateToken(Authentication authentication){
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + exp.toMillis());
+    public String generateAccessToken(Authentication authentication){
+        Date expiry = new Date(new Date().getTime() + accessExp.toMillis());
+        return generateToken(authentication, expiry);
+    }
 
+    public String generateRefreshToken(Authentication authentication){
+        Date expiry = new Date(new Date().getTime() + refreshExp.toMillis());
+        return generateToken(authentication, expiry);
+    }
+
+    private String generateToken(Authentication authentication, Date expiry){
         // Need to save roles as strings (not GrantedAuthority Objects)
         List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
