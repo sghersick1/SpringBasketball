@@ -76,6 +76,7 @@ public class JwtUtils {
                  .getPayload();
 
          List<String> roles = claims.get("roles", List.class);
+         roles.forEach(System.out::println);
          return roles.stream()
                  .map(SimpleGrantedAuthority::new)
                  .toList();

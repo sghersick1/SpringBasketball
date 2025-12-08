@@ -3,6 +3,7 @@ package loyola.basketball.Controller;
 import loyola.basketball.Entity.Game;
 import loyola.basketball.Service.GameService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -41,6 +42,7 @@ public class GameController {
      * @return HTTP response with game data in body, and endpoint in "location" header
      */
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Game> create(@RequestParam int homeId,
                                        @RequestParam(required = false) Integer homePoints,
                                        @RequestParam int awayId,

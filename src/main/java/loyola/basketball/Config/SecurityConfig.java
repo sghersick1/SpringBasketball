@@ -44,6 +44,7 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests((req) -> req
                 .requestMatchers("/team/**", "/game/**").authenticated()
+                .requestMatchers("/player/**").hasRole("ADMIN") // Only Admins can access players directly
                 .anyRequest().permitAll()
         );
         http.sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)));

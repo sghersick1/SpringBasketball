@@ -26,7 +26,6 @@ public class TeamController {
      * @return team object (JSON)
      */
     @GetMapping()
-    @PreAuthorize(".hasRole")
     public ResponseEntity<Team> getTeamById(@RequestParam int teamId){
         return new ResponseEntity(teamService.getTeam(teamId), HttpStatus.OK);
     }
@@ -46,6 +45,7 @@ public class TeamController {
      * @return team created + location to GET team in future (http location header)
      */
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Team> createTeam(@RequestParam String teamName){
         Team t = new Team(teamName);
         URI getEndpoint = URI.create("/team/"+t.getTeamId());
