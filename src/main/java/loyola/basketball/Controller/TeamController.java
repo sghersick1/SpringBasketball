@@ -4,6 +4,7 @@ import loyola.basketball.Entity.Team;
 import loyola.basketball.Service.TeamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -25,6 +26,7 @@ public class TeamController {
      * @return team object (JSON)
      */
     @GetMapping()
+    @PreAuthorize(".hasRole")
     public ResponseEntity<Team> getTeamById(@RequestParam int teamId){
         return new ResponseEntity(teamService.getTeam(teamId), HttpStatus.OK);
     }
@@ -48,6 +50,15 @@ public class TeamController {
         Team t = new Team(teamName);
         URI getEndpoint = URI.create("/team/"+t.getTeamId());
         return ResponseEntity.created(getEndpoint).body(t);
+    }
+
+    @DeleteMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> delete(@RequestParam int ID){
+        // Delete team from database
+        // ...
+
+        return ResponseEntity.status(HttpStatus.OK).body("Team "+ID+" Successfully Deleted");
     }
 
 }

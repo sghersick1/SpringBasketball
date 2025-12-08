@@ -55,10 +55,9 @@ public class AuthenticationJwtTokenFilter extends OncePerRequestFilter {
         System.out.println(jwtUtils.isValid(token));
 
         if(jwtUtils.isValid(token)) {
-            String username = jwtUtils.extractUsername(token);
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     jwtUtils.extractUsername(token),
-                    "password",
+                    null,
                     jwtUtils.extractAuthorities(token));
 
             // Set Security Context using Holder
