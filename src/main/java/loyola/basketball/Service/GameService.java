@@ -16,7 +16,7 @@ public class GameService {
     public GameService(GameRepository gameRepo){this.gameRepo = gameRepo;}
 
     public List<Game> schedule(){
-        return gameRepo.schedule();
+        return gameRepo.getAllGames();
     }
     public Game createGame(int homeId, Integer homePoints, int awayId, Integer awayPoints, String location, Date date, Time time){
         Game game = new Game(homeId, awayId);
