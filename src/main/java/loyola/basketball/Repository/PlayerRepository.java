@@ -71,6 +71,11 @@ public class PlayerRepository {
         return players.get(0);
     }
 
+    /**
+     * Get all Players for a specific Team
+     * @param teamId ID of the team
+     * @return List of Players belonging to the team (empty list if team has no players)
+     */
     public List<Player> getPlayersByTeam(int teamId){
         String sqlScript = "SELECT * from players where id_team = ?;";
         return jdbc.query(con -> {
@@ -78,6 +83,21 @@ public class PlayerRepository {
             ps.setInt(1, teamId);
             return ps;
         }, mapper);
+    }
+    
+    /**
+     * Update a Player's name in the Database
+     * @param playerId ID of player to update
+     * @param playerName New player name
+     * @throws PlayerNotFoundException if no player is found with the given ID
+     */
+    public void updatePlayer(int playerId, String playerName){
+        String sqlScript = "UPDATE players SET name_player = ? WHERE id_player = ?";
+        int rowsAffected = jdbc.update(sqlScript, playerName, playerId);
+        
+        if (rowsAffected == 0) {
+            throw new PlayerNotFoundException(playerId);
+        }
     }
     
     /**
