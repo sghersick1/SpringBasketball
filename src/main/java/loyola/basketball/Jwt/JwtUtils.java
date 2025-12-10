@@ -31,17 +31,32 @@ public class JwtUtils {
     private final Duration accessExp = Duration.ofMinutes(25);
     private final Duration refreshExp = Duration.ofDays(30);
 
-    // Generate user token with
+    /**
+     * Generate Access Token (expires after ~25 minutes)
+     * @param authentication Users Authentication Details
+     * @return Signed JWT Access Token
+     */
     public String generateAccessToken(Authentication authentication){
         Date expiry = new Date(new Date().getTime() + accessExp.toMillis());
         return generateToken(authentication, expiry);
     }
 
+    /**
+     * Generate Refresh Token (expires after ~30 days)
+     * @param authentication Users Authentication Details
+     * @return Signed JWT Refresh Token
+     */
     public String generateRefreshToken(Authentication authentication){
         Date expiry = new Date(new Date().getTime() + refreshExp.toMillis());
         return generateToken(authentication, expiry);
     }
 
+    /**
+     * Generate a JWT Token
+     * @param authentication Users Authentication Details
+     * @param expiry Duration of Time Until Token Expires
+     * @return Signed JWT Token
+     */
     private String generateToken(Authentication authentication, Date expiry){
         // Need to save roles as strings (not GrantedAuthority Objects)
         List<String> roles = authentication.getAuthorities().stream()
@@ -57,7 +72,11 @@ public class JwtUtils {
                 .compact();
     }
 
-    // Extract username from token
+    /**
+     * Extract Username from JWT Token
+     * @param token JWT Token
+     * @return User's Username
+     */
     public String extractUsername(String token) {
         return Jwts.parser()
                 .setSigningKey(getSigningKey())
@@ -67,7 +86,11 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    // Extract authorities
+    /**
+     * Extract User Authorities From JWT Token
+     * @param token JWT Token
+     * @return Collection of User's Roles (ex: USER, ADMIN)
+     */
     public Collection<? extends GrantedAuthority> extractAuthorities(String token){
          Claims claims = Jwts.parser()
                 .setSigningKey(getSigningKey())
@@ -82,7 +105,13 @@ public class JwtUtils {
                  .toList();
     }
 
-    // Verify token has expiration time
+    /**
+     * Verify a JWT Token:
+     * 1) Signed With Secret Key
+     * 2) Not Expired
+     * @param token JWT Token
+     * @return True When Passes Both Conditions, False Otherwise
+     */
     public boolean isValid(String token){
         try{
             return !extractExpiration(token).before(new Date());
@@ -92,7 +121,11 @@ public class JwtUtils {
         }
     }
 
-    // Extract token expiration
+    /**
+     * Extract Expiration Date From JWT Token
+     * @param token JWT Token
+     * @return Expiration Date
+     */
     private Date extractExpiration(String token) {
         return Jwts.parser()
                 .setSigningKey(getSigningKey())
@@ -102,7 +135,11 @@ public class JwtUtils {
                 .getExpiration();
     }
 
-    SecretKey getSigningKey() {
+    /**
+     * Generate Signing Key from jwtSecret String
+     * @return Signing Key
+     */
+    private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
