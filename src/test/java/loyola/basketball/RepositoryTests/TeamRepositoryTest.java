@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -28,8 +27,7 @@ public class TeamRepositoryTest {
 
     @Mock
     private JdbcTemplate jdbc;
-    @Mock
-    private TeamMapper mapper;  
+
     @InjectMocks
     private TeamRepository teamRepository;
 
@@ -40,7 +38,7 @@ public class TeamRepositoryTest {
         Team team = new Team();
         team.setTeamId(1);
         team.setTeamName("Test Team");
-        when(jdbc.query(any(PreparedStatementCreator.class), any(RowMapper.class)))
+        when(jdbc.query(any(PreparedStatementCreator.class), any(TeamMapper.class)))
                 .thenReturn(List.of(team));
         
         // Act
@@ -57,7 +55,7 @@ public class TeamRepositoryTest {
     public void getTeamById_TeamDoesNotExist_ThrowsTeamNotFoundException(){
         // Arrange
         int teamId = 999;
-        when(jdbc.query(any(PreparedStatementCreator.class), any(RowMapper.class)))
+        when(jdbc.query(any(PreparedStatementCreator.class), any(TeamMapper.class)))
                 .thenReturn(Collections.emptyList());
         
         // Act & Assert
@@ -79,7 +77,7 @@ public class TeamRepositoryTest {
         team2.setTeamName("Team Two");
         
         List<Team> expectedTeams = List.of(team1, team2);
-        when(jdbc.query(anyString(), any(RowMapper.class)))
+        when(jdbc.query(anyString(), any(TeamMapper.class)))
                 .thenReturn(expectedTeams);
         
         // Act
@@ -96,7 +94,7 @@ public class TeamRepositoryTest {
     @Test
     public void getAllTeams_NoTeamsExist_ReturnsEmptyList(){
         // Arrange
-        when(jdbc.query(anyString(), any(RowMapper.class)))
+        when(jdbc.query(anyString(), any(TeamMapper.class)))
                 .thenReturn(Collections.emptyList());
         
         // Act

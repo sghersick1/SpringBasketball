@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class TeamService {
-
     private final TeamRepository teamRepository;
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
@@ -22,14 +21,22 @@ public class TeamService {
         this.playerRepository = playerRepository;
     }
 
+    /**
+     * Get all Teams
+     * @return List of all Teams
+     */
     public List<Team> getAllTeams(){
         List<Team> teams = teamRepository.getAllTeams();
         return teams.stream()
                 .map(team -> updateGameStatistics(team))
-                //.sorted(StatisticsComparator::compare)
                 .toList();
     }
 
+    /**
+     * Get a Team by ID
+     * @param teamId of requested Team
+     * @return Team by their ID
+     */
     public Team getTeam(int teamId){
         return updateGameStatistics(teamRepository.getTeamById(teamId));
     }
